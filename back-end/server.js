@@ -20,7 +20,7 @@ app.use(
   cors({
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization'],
-    origin: 'http://localhost:5173',
+    origin: process.env.PUBLIC_URL,
   })
 )
 
