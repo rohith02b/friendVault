@@ -8,7 +8,6 @@ import {
 } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 import axios from 'axios'
-import { config } from '../../../axiosConfig'
 
 const navigation = [{ name: 'Home', href: '#', icon: HomeIcon, current: true }]
 const teams = [
@@ -30,10 +29,12 @@ export default function Example({ children }: any) {
 
   const handleClick = (e: any) => {
     e.preventDefault()
-    axios.post(`${config.url}/api/auth/logout`).then((response) => {
-      localStorage.removeItem('user')
-      window.location.reload()
-    })
+    axios
+      .post(`${import.meta.env.VITE_LOCALE_URL}/api/auth/logout`)
+      .then((response) => {
+        localStorage.removeItem('user')
+        window.location.reload()
+      })
   }
 
   return (

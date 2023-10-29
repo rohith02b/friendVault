@@ -1,5 +1,4 @@
 import { FormikValues, useFormik } from 'formik'
-import { config } from '../../../axiosConfig'
 import * as yup from 'yup'
 import { useState } from 'react'
 import axios from 'axios'
@@ -16,7 +15,7 @@ export default function Example() {
 
     onSubmit: (values: any) => {
       axios
-        .post(`${config.url}/api/auth/login`, values)
+        .post(`${import.meta.env.VITE_LOCALE_URL}/api/auth/login`, values)
         .then((response: any) => {
           localStorage.setItem('user', JSON.stringify(response?.data))
           navigate('/')
