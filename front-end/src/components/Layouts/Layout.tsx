@@ -11,9 +11,9 @@ import axios from 'axios'
 
 const navigation = [{ name: 'Home', href: '#', icon: HomeIcon, current: true }]
 const teams = [
-  { id: 1, name: 'Heroicons', href: '#', initial: 'H', current: false },
-  { id: 2, name: 'Tailwind Labs', href: '#', initial: 'T', current: false },
-  { id: 3, name: 'Workcation', href: '#', initial: 'W', current: false },
+  { id: 1, name: 'Group 1', href: '#', initial: '1', current: false },
+  { id: 2, name: 'Group 2', href: '#', initial: '2', current: false },
+  { id: 3, name: 'Group 3', href: '#', initial: '3', current: false },
 ]
 const userNavigation = [{ name: 'Sign out' }]
 
@@ -30,7 +30,7 @@ export default function Example({ children }: any) {
   const handleClick = (e: any) => {
     e.preventDefault()
     axios
-      .post(`${import.meta.env.VITE_LOCALE_URL}/api/auth/logout`)
+      .post(`${import.meta.env.VITE_AUTH_SERVICE_URL}/api/auth/logout`)
       .then((response) => {
         localStorage.removeItem('user')
         window.location.reload()
@@ -136,7 +136,7 @@ export default function Example({ children }: any) {
                         </li>
                         <li>
                           <div className='text-xs font-semibold leading-6 text-gray-400'>
-                            Your teams
+                            Your Groups
                           </div>
                           <ul role='list' className='-mx-2 mt-2 space-y-1'>
                             {teams.map((team) => (
@@ -218,7 +218,7 @@ export default function Example({ children }: any) {
                 </li>
                 <li>
                   <div className='text-xs font-semibold leading-6 text-gray-400'>
-                    Your teams
+                    Your Groups
                   </div>
                   <ul role='list' className='-mx-2 mt-2 space-y-1'>
                     {teams.map((team) => (

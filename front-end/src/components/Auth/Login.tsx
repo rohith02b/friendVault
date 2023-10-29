@@ -15,7 +15,7 @@ export default function Example() {
 
     onSubmit: (values: any) => {
       axios
-        .post(`${import.meta.env.VITE_LOCALE_URL}/api/auth/login`, values)
+        .post(`${import.meta.env.VITE_AUTH_SERVICE_URL}/api/auth/login`, values)
         .then((response: any) => {
           localStorage.setItem('user', JSON.stringify(response?.data))
           navigate('/')
@@ -31,8 +31,8 @@ export default function Example() {
       <div className='flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8'>
         <div className='sm:mx-auto sm:w-full sm:max-w-sm'>
           <img
-            className='mx-auto h-10 w-auto'
-            src='https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600'
+            className='mx-auto h-24 w-auto mt-5'
+            src='/assets/logo.png'
             alt='Your Company'
           />
           <h2 className='mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900'>
