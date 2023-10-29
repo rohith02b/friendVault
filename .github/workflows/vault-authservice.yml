@@ -1,4 +1,4 @@
-name: "Vault Portal - Build and Deploy"
+name: "Vault Auth Service - Build and Deploy"
 
 on:
   push:
