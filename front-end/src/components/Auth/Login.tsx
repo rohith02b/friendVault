@@ -3,10 +3,11 @@ import { config } from '../../../axiosConfig'
 import * as yup from 'yup'
 import { useState } from 'react'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 export default function Example() {
   const [error, setError] = useState<any>()
-
+  const navigate = useNavigate()
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -17,7 +18,8 @@ export default function Example() {
       axios
         .post(`${config.url}/api/auth/login`, values)
         .then((response: any) => {
-          console.log(response)
+          localStorage.setItem('user', JSON.stringify(response?.data))
+          navigate('/')
         })
         .catch((error) => {
           setError(error?.response?.data)
