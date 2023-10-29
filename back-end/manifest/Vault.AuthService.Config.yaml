@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ext-backend-configmap
+data:
+  server_port: "3000"
+  postgres_port: "5432"
+  postgres_database: "friendVault"
+  postgres_host: postgres-service
+  portal_url: "http://robadrin-aks1.westeurope.cloudapp.azure.com"  
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: ext-backend-secret
+type: Opaque
+data:
+  jwt_secret: ZnJpZW5kVmF1bHRTZWNyZXRKV1RDb2Rl
+  postgres_user: cG9zdGdyZXM=
+  postgres_password: cm9oaXRo
