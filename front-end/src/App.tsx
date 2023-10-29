@@ -13,7 +13,7 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path='/vault/app' element={<Redirector />}>
+        <Route path='/' element={<Redirector />}>
           <Route path='auth/login' element={<Login />} />
           <Route path='auth/register' element={<Register />} />
         </Route>
