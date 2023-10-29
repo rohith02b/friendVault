@@ -36,5 +36,5 @@ spec:
     app: vault-portal
   ports:
     - protocol: TCP
-      port: 8080
+      port: 8081
       targetPort: 80
