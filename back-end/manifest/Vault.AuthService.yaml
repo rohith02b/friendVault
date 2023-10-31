@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vault-authservice
+  labels:
+    app: vault-authservice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vault-authservice
+  template:
+    metadata:
+      labels:
+        app: vault-authservice
+    spec:
+      containers:
+        - name: vault-authservice
+          image: robadrinacr1.azurecr.io/vault-authservice:latest
+          ports:
+            - containerPort: 3000
+          imagePullPolicy: Always
+          env:
+            - name: PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: vault-authservice-configmap
+                  key: server_port
+            - name: DB_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: vault-authservice-configmap
+                  key: postgres_port
+            - name: DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: vault-authservice-configmap
+                  key: postgres_database
+            - name: HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: vault-authservice-configmap
+                  key: postgres_host
+            - name: PUBLIC_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: vault-authservice-configmap
+                  key: portal_url
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: vault-authservice-secret
+                  key: jwt_secret
+            - name: USER
+              valueFrom:
+                secretKeyRef:
+                  name: vault-authservice-secret
+                  key: postgres_user
+            - name: PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: vault-authservice-secret
+                  key: postgres_password
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vault-authservice-service
+spec:
+  selector:
+    app: vault-authservice
+  ports:
+    - protocol: TCP
+      port: 3001
+      targetPort: 3000
