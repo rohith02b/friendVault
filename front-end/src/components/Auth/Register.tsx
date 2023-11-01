@@ -34,7 +34,7 @@ export default function Example() {
         <div className='sm:mx-auto sm:w-full sm:max-w-sm'>
           <img
             className='mx-auto h-24 w-auto mt-5'
-            src='./assets/logo.png'
+            src='	http://robadrin-aks1.westeurope.cloudapp.azure.com/vault/app/assets/logo.png'
             alt='Your Company'
           />
           <h2 className='mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900'>
