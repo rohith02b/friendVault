@@ -14,6 +14,7 @@ export default function Example() {
     },
 
     onSubmit: (values: any) => {
+      console.log(`${import.meta.env.VITE_AUTH_SERVICE_URL}`)
       axios
         .post(`${import.meta.env.VITE_AUTH_SERVICE_URL}/api/auth/login`, values)
         .then((response: any) => {

@@ -3,5 +3,5 @@ kind: ConfigMap
 metadata:
   name: vault-portal-configmap
 data:
-  AUTH_SERVICE_URL: 'http://robadrin-aks1.westeurope.cloudapp.azure.com/vault/service'
-  BASE_ROUTE: '/vault/app/'
+  auth-service-url: 'http://robadrin-aks1.westeurope.cloudapp.azure.com/vault/service'
+  base-url: '/vault/app'

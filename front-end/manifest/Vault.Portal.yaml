@@ -26,6 +26,11 @@ spec:
                 configMapKeyRef:
                   name: vault-portal-configmap
                   key: auth-service-url
+            - name: VITE_BASE_ROUTE
+              valueFrom:
+                configMapKeyRef:
+                  name: vault-portal-configmap
+                  key: base-url
 ---
 apiVersion: v1
 kind: Service
