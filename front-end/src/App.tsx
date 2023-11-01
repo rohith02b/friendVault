@@ -10,6 +10,9 @@ import Redirector from './components/Redirector'
 function App() {
   axios.defaults.withCredentials = true
   const baseUrl = import.meta.env.VITE_BASE_ROUTE
+  const authUrl = import.meta.env.VITE_AUTH_SERVICE_URL
+
+  console.log(baseUrl, authUrl)
 
   return (
     <>
