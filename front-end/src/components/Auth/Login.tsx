@@ -18,7 +18,7 @@ export default function Example() {
         .post(`${import.meta.env.VITE_AUTH_SERVICE_URL}/api/auth/login`, values)
         .then((response: any) => {
           localStorage.setItem('user', JSON.stringify(response?.data))
-          navigate('/')
+          navigate(import.meta.env.VITE_BASE_ROUTE)
         })
         .catch((error) => {
           setError(error?.response?.data)

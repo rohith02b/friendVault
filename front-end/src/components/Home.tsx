@@ -6,7 +6,7 @@ export default function Example() {
       <div className='relative isolate px-6 lg:px-8'>
         <div className='flex justify-center'>
           <img
-            src='./assets/logo.png'
+            src='http://robadrin-aks1.westeurope.cloudapp.azure.com/vault/app/assets/logo.png'
             alt='FriendVault'
             className='w-32 h-32 mb-6'
           />
@@ -22,13 +22,13 @@ export default function Example() {
             </p>
             <div className='mt-8 flex items-center justify-center gap-x-6'>
               <a
-                href='/vault/app/auth/register'
+                href={`${import.meta.env.VITE_BASE_ROUTE}auth/register`}
                 className='rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
               >
                 Get started
               </a>
               <a
-                href='/vault/app/auth/login'
+                href={`${import.meta.env.VITE_BASE_ROUTE}auth/login`}
                 className='rounded-md bg-indigo-600 px-7 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
               >
                 Login

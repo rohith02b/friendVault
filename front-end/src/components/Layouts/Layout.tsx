@@ -104,7 +104,7 @@ export default function Example({ children }: any) {
                   <div className='flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 pb-4 ring-1 ring-white/10'>
                     <div className='flex justify-center mt-5 mr-3'>
                       <img
-                        src='./assets/logo-dark.png'
+                        src='http://robadrin-aks1.westeurope.cloudapp.azure.com/vault/app/assets/logo-dark.png'
                         alt='FriendVault'
                         className='w-32 h-32 mb-6'
                       />
