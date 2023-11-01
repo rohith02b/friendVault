@@ -13,10 +13,9 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path='/' element={<Redirector />}>
-          <Route path='/vault/app/auth/login' element={<Login />} />
-          <Route path='/vault/app/auth/register' element={<Register />} />
-        </Route>
+        <Route path='/vault/app' element={<Redirector />}/>
+        <Route path='/vault/app/auth/login' element={<Login />} />
+        <Route path='/vault/app/auth/register' element={<Register />} />
       </Routes>
     </>
   )
