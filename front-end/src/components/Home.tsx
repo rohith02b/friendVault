@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState } from 'react';
 
 export default function Example() {
   return (
@@ -6,7 +6,7 @@ export default function Example() {
       <div className='relative isolate px-6 lg:px-8'>
         <div className='flex justify-center'>
           <img
-            src='http://robadrin-aks1.westeurope.cloudapp.azure.com/vault/app/assets/logo.png'
+            src='/assets/logo.png'
             alt='FriendVault'
             className='w-32 h-32 mb-6'
           />
@@ -50,5 +50,5 @@ export default function Example() {
         </div>
       </div>
     </div>
-  )
+  );
 }

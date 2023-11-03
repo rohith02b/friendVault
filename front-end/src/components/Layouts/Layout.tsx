@@ -1,52 +1,47 @@
-import { Fragment, useState } from 'react'
-import { Dialog, Menu, Transition } from '@headlessui/react'
+import { Fragment, useState } from 'react';
+import { Dialog, Menu, Transition } from '@headlessui/react';
 import {
   Bars3Icon,
   Cog6ToothIcon,
   HomeIcon,
   XMarkIcon,
-} from '@heroicons/react/24/outline'
-import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
-import axios from 'axios'
+} from '@heroicons/react/24/outline';
+import {
+  ChevronDownIcon,
+  MagnifyingGlassIcon,
+} from '@heroicons/react/20/solid';
+import axios from 'axios';
 
-const navigation = [{ name: 'Home', href: '#', icon: HomeIcon, current: true }]
+const navigation = [{ name: 'Home', href: '#', icon: HomeIcon, current: true }];
 const teams = [
   { id: 1, name: 'Group 1', href: '#', initial: '1', current: false },
   { id: 2, name: 'Group 2', href: '#', initial: '2', current: false },
   { id: 3, name: 'Group 3', href: '#', initial: '3', current: false },
-]
-const userNavigation = [{ name: 'Sign out' }]
+];
+const userNavigation = [{ name: 'Sign out' }];
 
 function classNames(...classes: any) {
-  return classes.filter(Boolean).join(' ')
+  return classes.filter(Boolean).join(' ');
 }
 
 export default function Example({ children }: any) {
-  const [sidebarOpen, setSidebarOpen] = useState(false)
-  const storedUser = localStorage.getItem('user')
-  const initialUser = storedUser ? JSON.parse(storedUser) : null
-  const [user, setUser] = useState<any>(initialUser)
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const storedUser = localStorage.getItem('user');
+  const initialUser = storedUser ? JSON.parse(storedUser) : null;
+  const [user, setUser] = useState<any>(initialUser);
 
   const handleClick = (e: any) => {
-    e.preventDefault()
+    e.preventDefault();
     axios
       .post(`${import.meta.env.VITE_AUTH_SERVICE_URL}/api/auth/logout`)
       .then((response) => {
-        localStorage.removeItem('user')
-        window.location.reload()
-      })
-  }
+        localStorage.removeItem('user');
+        window.location.reload();
+      });
+  };
 
   return (
     <>
-      {/*
-        This example requires updating your template:
-
-        ```
-        <html class="h-full bg-white">
-        <body class="h-full">
-        ```
-      */}
       <div>
         <Transition.Root show={sidebarOpen} as={Fragment}>
           <Dialog
@@ -104,7 +99,7 @@ export default function Example({ children }: any) {
                   <div className='flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 pb-4 ring-1 ring-white/10'>
                     <div className='flex justify-center mt-5 mr-3'>
                       <img
-                        src='http://robadrin-aks1.westeurope.cloudapp.azure.com/vault/app/assets/logo-dark.png'
+                        src='/assets/logo-dark.png'
                         alt='FriendVault'
                         className='w-32 h-32 mb-6'
                       />
@@ -358,8 +353,8 @@ export default function Example({ children }: any) {
         </div>
       </div>
     </>
-  )
+  );
 }
 function useEffect(arg0: () => void, arg1: never[]) {
-  throw new Error('Function not implemented.')
+  throw new Error('Function not implemented.');
 }

@@ -1,12 +1,12 @@
-import { FormikValues, useFormik } from 'formik'
-import * as yup from 'yup'
-import { useState } from 'react'
-import axios from 'axios'
-import { useNavigate } from 'react-router-dom'
+import { FormikValues, useFormik } from 'formik';
+import * as yup from 'yup';
+import { useState } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 export default function Example() {
-  const [error, setError] = useState<any>()
-  const navigate = useNavigate()
+  const [error, setError] = useState<any>();
+  const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -14,18 +14,18 @@ export default function Example() {
     },
 
     onSubmit: (values: any) => {
-      console.log(`${import.meta.env.VITE_AUTH_SERVICE_URL}`)
+      console.log(`${import.meta.env.VITE_AUTH_SERVICE_URL}`);
       axios
         .post(`${import.meta.env.VITE_AUTH_SERVICE_URL}/api/auth/login`, values)
         .then((response: any) => {
-          localStorage.setItem('user', JSON.stringify(response?.data))
-          navigate(import.meta.env.VITE_BASE_ROUTE)
+          localStorage.setItem('user', JSON.stringify(response?.data));
+          navigate(import.meta.env.VITE_BASE_ROUTE);
         })
         .catch((error) => {
-          setError(error?.response?.data)
-        })
+          setError(error?.response?.data);
+        });
     },
-  })
+  });
 
   return (
     <>
@@ -33,7 +33,7 @@ export default function Example() {
         <div className='sm:mx-auto sm:w-full sm:max-w-sm'>
           <img
             className='mx-auto h-24 w-auto mt-5'
-            src='	http://robadrin-aks1.westeurope.cloudapp.azure.com/vault/app/assets/logo.png'
+            src='/assets/logo.png'
             alt='Your Company'
           />
           <h2 className='mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900'>
@@ -111,5 +111,5 @@ export default function Example() {
         </div>
       </div>
     </>
-  )
+  );
 }

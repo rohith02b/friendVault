@@ -1,10 +1,10 @@
-import { FormikValues, useFormik } from 'formik'
-import * as yup from 'yup'
-import { useState } from 'react'
-import axios from 'axios'
+import { FormikValues, useFormik } from 'formik';
+import * as yup from 'yup';
+import { useState } from 'react';
+import axios from 'axios';
 
 export default function Example() {
-  const [error, setError] = useState<any>()
+  const [error, setError] = useState<any>();
 
   const formik = useFormik({
     initialValues: {
@@ -20,13 +20,13 @@ export default function Example() {
           values
         )
         .then((response: any) => {
-          console.log(response)
+          console.log(response);
         })
         .catch((error) => {
-          setError(error?.response?.data)
-        })
+          setError(error?.response?.data);
+        });
     },
-  })
+  });
 
   return (
     <>
@@ -34,7 +34,7 @@ export default function Example() {
         <div className='sm:mx-auto sm:w-full sm:max-w-sm'>
           <img
             className='mx-auto h-24 w-auto mt-5'
-            src='	http://robadrin-aks1.westeurope.cloudapp.azure.com/vault/app/assets/logo.png'
+            src='/assets/logo.png'
             alt='Your Company'
           />
           <h2 className='mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900'>
@@ -134,5 +134,5 @@ export default function Example() {
         </div>
       </div>
     </>
-  )
+  );
 }
