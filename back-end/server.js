@@ -29,6 +29,6 @@ app.use('/vault/service/api/auth', authRoutes);
 app.use((req, res, next) => {
   res.status(404).send("Sorry can't find that!");
 });
-app.listen(PORT, () => {
+app.listen(3000, () => {
   console.log('Working');
 });
