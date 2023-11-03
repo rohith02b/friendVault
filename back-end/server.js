@@ -10,12 +10,6 @@ const PORT = process.env.PORT;
 app.use(express.json());
 app.use(cookieParser());
 
-app.get('/vault/service/api/', (req, res) => {
-  return res.json({
-    message: PORT,
-  });
-});
-
 app.use(
   cors({
     credentials: true,
@@ -26,9 +20,13 @@ app.use(
 
 //Auth
 app.use('/vault/service/api/auth', authRoutes);
-app.use((req, res, next) => {
-  res.status(404).send("Sorry can't find that!");
+
+app.get('/vault/service/api/', (req, res) => {
+  return res.json({
+    message: PORT,
+  });
 });
+
 app.listen(3000, () => {
   console.log('Working');
 });
