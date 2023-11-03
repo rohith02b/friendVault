@@ -9,17 +9,13 @@ import Redirector from './components/Redirector';
 
 function App() {
   axios.defaults.withCredentials = true;
-  const baseUrl = import.meta.env.VITE_BASE_ROUTE;
-  const authUrl = import.meta.env.VITE_AUTH_SERVICE_URL;
-
-  console.log(baseUrl, authUrl);
 
   return (
     <>
       <Routes>
-        <Route path={baseUrl} element={<Redirector />} />
-        <Route path={`${baseUrl}auth/register`} element={<Register />} />
-        <Route path={`${baseUrl}auth/login`} element={<Login />} />
+        <Route path='/' element={<Redirector />} />
+        <Route path='/auth/register' element={<Register />} />
+        <Route path='/auth/login' element={<Login />} />
       </Routes>
     </>
   );
