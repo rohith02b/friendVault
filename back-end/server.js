@@ -10,7 +10,7 @@ const PORT = process.env.PORT;
 app.use(express.json());
 app.use(cookieParser());
 
-app.get('/vault/service/', (req, res) => {
+app.get('/vault/service/api/', (req, res) => {
   return res.json({
     message: PORT,
   });
