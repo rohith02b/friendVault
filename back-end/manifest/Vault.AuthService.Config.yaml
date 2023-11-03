@@ -3,11 +3,11 @@ kind: ConfigMap
 metadata:
   name: vault-authservice-configmap
 data:
-  server_port: "3000"
-  postgres_port: "5432"
-  postgres_database: "friendVault"
+  server_port: '3000'
+  postgres_port: '5432'
+  postgres_database: 'friendVault'
   postgres_host: postgres-service
-  portal_url: "http://robadrin-aks1.westeurope.cloudapp.azure.com"  
+  portal_url: 'https://friendvault.netlify.app/'
 ---
 apiVersion: v1
 kind: Secret
