@@ -4,9 +4,6 @@ metadata:
   name: vault-authservice-configmap
 data:
   server_port: '3000'
-  postgres_port: '5432'
-  postgres_database: 'friendvault'
-  postgres_host: postgres-service
   portal_url: 'https://friendvault.netlify.app/'
 ---
 apiVersion: v1
@@ -16,5 +13,4 @@ metadata:
 type: Opaque
 data:
   jwt_secret: ZnJpZW5kVmF1bHRTZWNyZXRKV1RDb2Rl
-  postgres_user: cG9zdGdyZXM=
-  postgres_password: cm9oaXRo
+  database_url: cG9zdGdyZXNxbDovL3Bvc3RncmVzOnJvaGl0aEBwb3N0Z3Jlcy1zZXJ2aWNlOjU0MzIvZnJpZW5kdmF1bHQ=
