@@ -5,7 +5,7 @@ metadata:
 data:
   server_port: '3000'
   postgres_port: '5432'
-  postgres_database: 'friendVault'
+  postgres_database: 'friendvault'
   postgres_host: postgres-service
   portal_url: 'https://friendvault.netlify.app/'
 ---
