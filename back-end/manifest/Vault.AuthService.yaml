@@ -31,6 +31,16 @@ spec:
                 configMapKeyRef:
                   name: vault-authservice-configmap
                   key: portal_url
+            - name: CONNECTION_STRING
+              valueFrom:
+                configMapKeyRef:
+                  name: vault-authservice-configmap
+                  key: connection_string
+            - name: CONTAINER
+              valueFrom:
+                configMapKeyRef:
+                  name: vault-authservice-configmap
+                  key: container
             - name: JWT_SECRET
               valueFrom:
                 secretKeyRef:
