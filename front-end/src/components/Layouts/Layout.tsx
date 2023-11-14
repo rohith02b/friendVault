@@ -3,6 +3,7 @@ import { Dialog, Menu, Transition } from '@headlessui/react';
 import {
   Bars3Icon,
   Cog6ToothIcon,
+  FolderArrowDownIcon,
   HomeIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline';
@@ -11,6 +12,7 @@ import {
   MagnifyingGlassIcon,
 } from '@heroicons/react/20/solid';
 import axios from 'axios';
+import 'animate.css';
 
 const navigation = [{ name: 'Home', href: '#', icon: HomeIcon, current: true }];
 const teams = [

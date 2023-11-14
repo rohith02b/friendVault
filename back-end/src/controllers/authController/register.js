@@ -33,7 +33,7 @@ const register = async (req, res) => {
         password: hashedPassword,
       },
     });
-    res.json(createdUser);
+    res.json('User created successfully');
   } catch (err) {
     console.log(err);
     res.status(500).json(err);

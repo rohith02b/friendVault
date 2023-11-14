@@ -2,9 +2,11 @@ import { FormikValues, useFormik } from 'formik';
 import * as yup from 'yup';
 import { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 export default function Example() {
   const [error, setError] = useState<any>();
+  const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
@@ -20,7 +22,7 @@ export default function Example() {
           values
         )
         .then((response: any) => {
-          console.log(response);
+          navigate('/auth/login');
         })
         .catch((error) => {
           setError(error?.response?.data);
@@ -125,7 +127,7 @@ export default function Example() {
           <p className='mt-10 text-center text-sm text-gray-500'>
             Already a member?{' '}
             <a
-              href='auth/login'
+              href='/auth/login'
               className='font-semibold leading-6 text-indigo-600 hover:text-indigo-500'
             >
               Login

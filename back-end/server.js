@@ -3,7 +3,9 @@ const app = express();
 const dotenv = require('dotenv');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
-const authRoutes = require('./src/routes/Auth');
+const authRoutes = require('./src/routes/auth');
+const groupRoutes = require('./src/routes/group');
+const fileRoutes = require('./src/routes/files');
 dotenv.config();
 const PORT = process.env.PORT;
 
@@ -20,6 +22,12 @@ app.use(
 
 //Auth
 app.use('/vault/service/api/auth', authRoutes);
+
+//Groups
+app.use('/vault/service/api/groups', groupRoutes);
+
+// files
+app.use('/vault/service/api/files', fileRoutes);
 
 app.use((req, res, next) => {
   res.status(404).send("Sorry can't find that!");

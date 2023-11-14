@@ -8,5 +8,4 @@ RUN npm install
 
 # Run
 EXPOSE 3000
-CMD ["npx" , "prisma" , "migrate" , "deploy" ]
-CMD [ "node", "server.js" ]
+CMD ["sh", "-c", "npx prisma migrate deploy && node server.js" ]

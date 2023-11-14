@@ -17,3 +17,18 @@ model users {
   password String
 }
 
+model groups {
+  id String @unique
+  owner String
+  code String @unique
+  name String
+  members String[] 
+}
+
+model files {
+  group_id String
+  url String @unique
+  path String 
+  file_name String
+  type String
+}
