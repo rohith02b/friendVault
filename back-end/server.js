@@ -34,9 +34,4 @@ app.use((req, res, next) => {
 });
 app.listen(PORT, () => {
   console.log('Working');
-  try {
-    console.log(process.env.DEMO);
-  } catch (error) {
-    console.log('Env did not work');
-  }
 });

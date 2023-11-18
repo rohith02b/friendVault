@@ -4,7 +4,7 @@ metadata:
   name: vault-authservice-configmap
 data:
   server_port: '3000'
-  portal_url: 'https://friendvault.netlify.app/'
+  portal_url: 'https://friendvault.netlify.app'
 ---
 apiVersion: v1
 kind: Secret
@@ -14,4 +14,5 @@ type: Opaque
 data:
   jwt_secret: ZnJpZW5kVmF1bHRTZWNyZXRKV1RDb2Rl
   database_url: cG9zdGdyZXNxbDovL3Bvc3RncmVzOnJvaGl0aEBwb3N0Z3Jlcy1zZXJ2aWNlOjU0MzIvZnJpZW5kdmF1bHQ=
-  demo: dGhpc2lzYXNlY3JldA==
+  connection_string: RGVmYXVsdEVuZHBvaW50c1Byb3RvY29sPWh0dHBzO0FjY291bnROYW1lPXJvYmFkcmluc2ExO0FjY291bnRLZXk9WXFBWFlTSFZHRFMxaFR5NERKNWRvTENwU3J0Z3FBOFRocWJhNlRkSVVFQ0pqL0pzYTg1REQzeWM5bnlSdm42RXhPVFhIcWZOdU0vU1ZkMDBEMGRGeXc9PTtFbmRwb2ludFN1ZmZpeD1jb3JlLndpbmRvd3MubmV0
+  container: friendvault

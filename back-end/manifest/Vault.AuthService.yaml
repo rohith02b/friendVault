@@ -41,11 +41,16 @@ spec:
                 secretKeyRef:
                   name: vault-authservice-secret
                   key: database_url
-            - name: DEMO
+            - name: CONNECTION_STRING
               valueFrom:
-                configMapKeyRef:
+                secretKeyRef:
                   name: vault-authservice-secret
-                  key: demo
+                  key: connection_string
+            - name: CONTAINER
+              valueFrom:
+                secretKeyRef:
+                  name: vault-authservice-secret
+                  key: container
 
 ---
 apiVersion: v1
