@@ -3,6 +3,8 @@ const { CreateGroup } = require('../controllers/groupController/createGroup');
 const { GetGroups } = require('../controllers/groupController/getGroups');
 const { ModifyGroup } = require('../controllers/groupController/modifyGroup');
 const { isUserValid } = require('../middleware/isUserValid');
+const dotenv = require('dotenv')
+dotenv.config();
 
 // List of groups the requested user is in
 router.get('/', isUserValid, GetGroups);

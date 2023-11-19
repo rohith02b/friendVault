@@ -9,6 +9,7 @@ const blobServiceClient =
 const container = process.env.CONTAINER;
 const containerClient = blobServiceClient.getContainerClient(container);
 
+
 const uploadFile = async (req, res) => {
   try {
     const files = req.files;
@@ -31,13 +32,14 @@ const uploadFile = async (req, res) => {
       const blockBlobClient = containerClient.getBlockBlobClient(path);
 
       await blockBlobClient.uploadFile(file.path);
-      await prisma.files.create({
+      await prisma.content.create({
         data: {
+          content_id : id,
           group_id: group,
           url: blockBlobClient.url,
           path: req.query.path || '/',
-          file_name: file.originalname,
-          type: 'file',
+          content_name: file.originalname,
+          content_type: 'file',
         },
       });
       fs.unlinkSync(file.path);

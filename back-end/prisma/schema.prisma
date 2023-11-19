@@ -25,10 +25,11 @@ model groups {
   members String[] 
 }
 
-model files {
+model content {
+  content_id String @unique
   group_id String
-  url String @unique
+  url String 
   path String 
-  file_name String
-  type String
+  content_name String
+  content_type String
 }

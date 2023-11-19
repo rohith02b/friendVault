@@ -4,6 +4,8 @@ const { uploadFile } = require('../controllers/filesController/uploadFile');
 const { createFolder } = require('../controllers/filesController/createFolder');
 const { isUserValid } = require('../middleware/isUserValid');
 const { isUserInGroup } = require('../middleware/isUserInGroup');
+const dotenv = require('dotenv')
+dotenv.config();
 
 const upload = multer({ dest: 'uploads/' });
 

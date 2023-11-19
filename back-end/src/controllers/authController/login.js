@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const prisma = require('../../dbConnect/connection');
 
+
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
