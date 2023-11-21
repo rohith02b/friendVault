@@ -10,7 +10,7 @@ function App() {
   axios.defaults.withCredentials = true;
   const baseUrl = import.meta.env.VITE_BASE_ROUTE;
 
-  console.log(baseUrl);
+  
 
 
   return (

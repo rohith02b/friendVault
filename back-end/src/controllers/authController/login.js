@@ -2,7 +2,6 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const prisma = require('../../dbConnect/connection');
 
-
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -26,9 +25,8 @@ const login = async (req, res) => {
 
       // this token should be stored in the client as it is used for authentication and authorization in the later requests
       res
-        .cookie('access_token', token, {
-          httpOnly: false,
-          secure: true,
+        .cookie('access_token', token,{
+          someSite : 'None'
         })
         .status(200)
         .json({ username: userExists.username, email: userExists.email });
