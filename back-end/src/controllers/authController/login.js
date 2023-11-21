@@ -27,7 +27,7 @@ const login = async (req, res) => {
       // this token should be stored in the client as it is used for authentication and authorization in the later requests
       res
         .cookie('access_token', token, {
-          httpOnly: true,
+          httpOnly: false,
         })
         .status(200)
         .json({ username: userExists.username, email: userExists.email });

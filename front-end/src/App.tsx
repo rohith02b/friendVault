@@ -1,15 +1,17 @@
-import { useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import './App.css';
-import Home from './components/Home';
 import Login from './components/Auth/Login';
 import Register from './components/Auth/Register';
 import axios from 'axios';
 import Redirector from './components/Redirector';
+import Group from './components/Groups/Group';
 
 function App() {
   axios.defaults.withCredentials = true;
   const baseUrl = import.meta.env.VITE_BASE_ROUTE;
+
+  console.log(baseUrl);
+
 
   return (
     <>
@@ -17,6 +19,7 @@ function App() {
         <Route path={baseUrl} element={<Redirector />} />
         <Route path={`${baseUrl}/auth/register`} element={<Register />} />
         <Route path={`${baseUrl}/auth/login`} element={<Login />} />
+        <Route path={`${baseUrl}/:groupId/*`} element={<Group />} />
       </Routes>
     </>
   );
