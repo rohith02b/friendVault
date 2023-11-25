@@ -12,6 +12,7 @@ const AddContent = ({ open, handleClose, handleSave }: any) => {
   const navigate = useNavigate();
   const BASEURL = import.meta.env.VITE_AUTH_SERVICE_URL;
   const { groupId, '*': path } = useParams();
+  const [loading, setLoading] = useState(false);
 
   const formik = useFormik({
     initialValues: {
@@ -19,6 +20,7 @@ const AddContent = ({ open, handleClose, handleSave }: any) => {
     },
 
     onSubmit: (values: any) => {
+      setLoading(true);
       const formData = new FormData();
       if (values.fileUpload && values.fileUpload.length > 0) {
         for (let i = 0; i < values.fileUpload.length; i++) {
@@ -36,13 +38,14 @@ const AddContent = ({ open, handleClose, handleSave }: any) => {
           },
         })
         .then((response: any) => {
-          setTimeout(() => {
-            window.location.reload();
-            handleClose();
-          }, 2000);
+          console.log(response);
+          handleClose();
         })
         .catch((error: any) => {
           console.log(error);
+        })
+        .then(() => {
+          window.location.reload();
         });
     },
   });
@@ -116,6 +119,8 @@ const AddContent = ({ open, handleClose, handleSave }: any) => {
                     <option>Create a folder</option>
                   </select>
                 </div>
+
+                {loading ? <GlobalLoader /> : null}
 
                 {option === 'Upload files' ? (
                   <form onSubmit={formik?.handleSubmit}>

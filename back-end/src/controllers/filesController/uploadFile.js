@@ -13,36 +13,40 @@ const uploadFile = async (req, res) => {
   try {
     const files = req.files;
     const group = req.params.groupId;
-    files.map(async (file) => {
-      const id = uniqueId.time();
-      const fileProps = file.originalname.split('.');
-      const fileName = `${fileProps[0]}-${id}.${
-        fileProps[fileProps.length - 1]
-      }`;
 
-      let path = '';
-      if (req.query.path) {
-        path = `${group}${req.query.path}/${fileName}`;
-      } else {
-        path = `${group}/${fileName}`;
-      }
+    // Use Promise.all to wait for all async operations to complete
+    await Promise.all(
+      files.map(async (file) => {
+        const id = uniqueId.time();
+        const fileProps = file.originalname.split('.');
+        const fileName = `${fileProps[0]}-${id}.${
+          fileProps[fileProps.length - 1]
+        }`;
 
-      console.log;
-      const blockBlobClient = containerClient.getBlockBlobClient(path);
+        let path = '';
+        if (req.query.path) {
+          path = `${group}${req.query.path}/${fileName}`;
+        } else {
+          path = `${group}/${fileName}`;
+        }
+        const blockBlobClient = containerClient.getBlockBlobClient(path);
 
-      await blockBlobClient.uploadFile(file.path);
-      await prisma.content.create({
-        data: {
-          content_id: id,
-          group_id: group,
-          url: blockBlobClient.url,
-          path: req.query.path || '/',
-          content_name: file.originalname,
-          content_type: 'file',
-        },
-      });
-      fs.unlinkSync(file.path);
-    });
+        // Wait for both uploadFile and database insert to finish before moving to the next file
+        await blockBlobClient.uploadFile(file.path);
+        await prisma.content.create({
+          data: {
+            content_id: id,
+            group_id: group,
+            url: blockBlobClient.url,
+            path: req.query.path || '/',
+            content_name: file.originalname,
+            content_type: 'file',
+          },
+        });
+        fs.unlinkSync(file.path);
+      })
+    );
+
     return res.json('Uploaded successfully');
   } catch (error) {
     return res.json('File error');
