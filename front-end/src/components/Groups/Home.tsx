@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import Layout from '../Layouts/Layout';
 import folderIcon from '/assets/folderIcon.png';
-import axios from 'axios';
+import axios from '../../axiosInstance';
 import CreateGroup from './CreateGroup';
 import { PlusIcon } from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
@@ -9,12 +9,11 @@ import { IconFolderFilled } from '@tabler/icons-react';
 
 const Home = () => {
   const [groups, setGroups] = useState<Array<any>>();
-  const BASEURL = import.meta.env.VITE_AUTH_SERVICE_URL;
   const [open, setOpen] = useState(false);
 
   const fetchGroups = () => {
     axios
-      .get(`${BASEURL}/api/groups/`)
+      .get(`/api/groups/`)
       .then((response: any) => {
         setGroups(response?.data);
       })

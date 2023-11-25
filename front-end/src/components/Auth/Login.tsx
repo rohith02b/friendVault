@@ -1,7 +1,7 @@
 import { FormikValues, useFormik } from 'formik';
 import * as yup from 'yup';
 import { useState } from 'react';
-import axios from 'axios';
+import axios from '../../axiosInstance';
 import { useNavigate } from 'react-router-dom';
 
 export default function Example() {
@@ -15,7 +15,7 @@ export default function Example() {
 
     onSubmit: (values: any) => {
       axios
-        .post(`${import.meta.env.VITE_AUTH_SERVICE_URL}/api/auth/login`, values)
+        .post(`/api/auth/login`, values)
         .then((response: any) => {
           localStorage.setItem('user', JSON.stringify(response?.data));
           navigate(import.meta.env.VITE_BASE_ROUTE);

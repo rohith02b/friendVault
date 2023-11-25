@@ -2,9 +2,8 @@ import { Fragment, useState } from 'react';
 import { Dialog, Menu, Transition } from '@headlessui/react';
 import { Bars3Icon, HomeIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid';
-import axios from 'axios';
 import 'animate.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { IconSettings, IconLogout } from '@tabler/icons-react';
 import { IconPlus } from '@tabler/icons-react';
 import AddContent from '../AddContent';
@@ -31,15 +30,13 @@ export default function Example({ children }: any) {
   const storedUser = localStorage.getItem('user');
   const initialUser = storedUser ? JSON.parse(storedUser) : null;
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
 
   const handleClick = (e: any) => {
     e.preventDefault();
-    axios
-      .post(`${import.meta.env.VITE_AUTH_SERVICE_URL}/api/auth/logout`)
-      .then((response) => {
-        localStorage.removeItem('user');
-        window.location.reload();
-      });
+    localStorage.removeItem('user');
+    navigate('/');
+    window.location.reload();
   };
 
   const handleClose = () => {

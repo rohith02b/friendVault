@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { PhotoIcon } from '@heroicons/react/24/outline';
 import { useFormik } from 'formik';
-import axios from 'axios';
+import axios from '../axiosInstance';
 import { useNavigate, useParams } from 'react-router-dom';
 import GlobalLoader from './GlobalLoader';
 
@@ -29,7 +29,7 @@ const AddContent = ({ open, handleClose, handleSave }: any) => {
       }
 
       axios
-        .post(`${BASEURL}/api/files/${groupId}`, formData, {
+        .post(`/api/files/${groupId}`, formData, {
           params: {
             path: `/${path}`,
           },

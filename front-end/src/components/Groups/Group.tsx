@@ -1,7 +1,7 @@
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import Layout from '../Layouts/Layout';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import axios from '../../axiosInstance';
 import { IconFolderFilled } from '@tabler/icons-react';
 import { IconFileFilled } from '@tabler/icons-react';
 import error from '../assets/error.json';
@@ -20,7 +20,7 @@ const Group = () => {
 
   const fetchContent = () => {
     axios
-      .get(`${BASEURL}/api/files/${groupId}`, {
+      .get(`/api/files/${groupId}`, {
         params: {
           path: `/${path}`,
         },

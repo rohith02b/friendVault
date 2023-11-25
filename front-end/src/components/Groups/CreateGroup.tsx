@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { FormikValues, useFormik } from 'formik';
-import axios from 'axios';
+import axios from '../../axiosInstance';
 
 const CreateGroup = ({ open, setOpen, handleClose }: any) => {
   const [option, setOption] = useState('');
@@ -16,7 +16,7 @@ const CreateGroup = ({ open, setOpen, handleClose }: any) => {
     onSubmit: (values: any) => {
       if (option === 'Create a group') {
         axios
-          .post(`${BASEURL}/api/groups/`, values)
+          .post(`/api/groups/`, values)
           .then((response: any) => {
             handleClose();
           })
@@ -25,7 +25,7 @@ const CreateGroup = ({ open, setOpen, handleClose }: any) => {
           });
       } else {
         axios
-          .put(`${BASEURL}/api/groups/`, values)
+          .put(`/api/groups/`, values)
           .then((response: any) => {
             handleClose();
           })

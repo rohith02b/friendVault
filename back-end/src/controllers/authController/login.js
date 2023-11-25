@@ -25,12 +25,14 @@ const login = async (req, res) => {
 
       // this token should be stored in the client as it is used for authentication and authorization in the later requests
       res
-        .cookie('access_token', token, {
-          sameSite: 'None',
-          secure: true,
-        })
+
         .status(200)
-        .json({ username: userExists.username, email: userExists.email });
+        .json({
+          username: userExists.username,
+          email: userExists.email,
+          token: token,
+          id: userExists.id,
+        });
     }
   } catch (err) {
     res.status(404).json('User not found');
