@@ -1,23 +1,19 @@
 import { Fragment, useState } from 'react';
 import { Dialog, Menu, Transition } from '@headlessui/react';
-import {
-  Bars3Icon,
-  Cog6ToothIcon,
-  FolderArrowDownIcon,
-  HomeIcon,
-  XMarkIcon,
-} from '@heroicons/react/24/outline';
-import {
-  ChevronDownIcon,
-  MagnifyingGlassIcon,
-} from '@heroicons/react/20/solid';
+import { Bars3Icon, HomeIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { MagnifyingGlassIcon } from '@heroicons/react/20/solid';
 import axios from 'axios';
 import 'animate.css';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
-import { IconSettings, IconLogout} from '@tabler/icons-react';
+import { Link } from 'react-router-dom';
+import { IconSettings, IconLogout } from '@tabler/icons-react';
+import { IconPlus } from '@tabler/icons-react';
+import AddContent from '../AddContent';
+import { useParams } from 'react-router-dom';
 
-const navigation = [{ name: 'Home', href: '/', icon: HomeIcon, current: true } ,
-{ name: 'Settings', href: '/', icon: IconSettings, current: false }];
+const navigation = [
+  { name: 'Home', href: '/', icon: HomeIcon, current: true },
+  { name: 'Settings', href: '/', icon: IconSettings, current: false },
+];
 const teams = [
   { id: 1, name: 'Group 1', href: '#', initial: '1', current: false },
   { id: 2, name: 'Group 2', href: '#', initial: '2', current: false },
@@ -30,10 +26,11 @@ function classNames(...classes: any) {
 }
 
 export default function Example({ children }: any) {
+  const { groupId } = useParams();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const storedUser = localStorage.getItem('user');
   const initialUser = storedUser ? JSON.parse(storedUser) : null;
-  const [user, setUser] = useState<any>(initialUser);
+  const [open, setOpen] = useState(false);
 
   const handleClick = (e: any) => {
     e.preventDefault();
@@ -43,6 +40,14 @@ export default function Example({ children }: any) {
         localStorage.removeItem('user');
         window.location.reload();
       });
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleSave = () => {
+    setOpen(false);
   };
 
   return (
@@ -102,15 +107,36 @@ export default function Example({ children }: any) {
                   </Transition.Child>
                   {/* Sidebar component, swap this element with another sidebar if you like */}
                   <div className='flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 pb-4 ring-1 ring-white/10'>
-                    <div className='flex justify-center mt-5 mr-3'>
-                      <img
-                        src='/assets/logo-dark.png'
-                        alt='FriendVault'
-                        className='w-32 h-32 mb-6'
-                      />
-                    </div>
                     <nav className='flex flex-1 flex-col'>
-                      <ul role='list' className='flex flex-1 flex-col gap-y-7'>
+                      <div className='flex justify-center mt-6 mr-3 flex-col'>
+                        <img
+                          src='/assets/logo-dark.png'
+                          alt='FriendVault'
+                          className='w-32 h-32 mb-3 mx-auto'
+                        />
+                        <div className='text-xl text-white mb-3 mx-auto'>
+                          FriendVault
+                        </div>
+                      </div>
+                      {groupId ? (
+                        <div className='flex justify-center'>
+                          <button
+                            className='py-3 rounded-md border border-green-500 hover:text-white hover:bg-transparent transition-all duration-300 w-32 text-slate-600 bg-green-400 flex  justify-center gap-4  '
+                            onClick={() => {
+                              setOpen(true);
+                              setSidebarOpen(false);
+                            }}
+                          >
+                            <IconPlus></IconPlus>
+                            New
+                          </button>
+                        </div>
+                      ) : null}
+
+                      <ul
+                        role='list'
+                        className='flex flex-1 flex-col gap-y-7 mt-6'
+                      >
                         <li>
                           <ul role='list' className='-mx-2 space-y-3'>
                             {navigation.map((item) => (
@@ -134,14 +160,14 @@ export default function Example({ children }: any) {
                             ))}
                           </ul>
                         </li>
-                        
+
                         <li className='mt-auto'>
                           <a
                             className='group -mx-2  flex w-full gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-400 hover:bg-gray-800 hover:text-white'
                             href='/'
                             onClick={handleClick}
                           >
-                            <IconLogout/>
+                            <IconLogout />
                             Logout
                           </a>
                         </li>
@@ -157,16 +183,28 @@ export default function Example({ children }: any) {
         {/* Static sidebar for desktop */}
         <div className='hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col'>
           {/* Sidebar component, swap this element with another sidebar if you like */}
-          <div className='flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 pb-4'>
-            <div className='flex justify-center mt-6 mr-3'>
+          <div className='flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 pb-4 '>
+            <div className='flex justify-center mt-6 mr-3 flex-col'>
               <img
                 src='/assets/logo-dark.png'
                 alt='FriendVault'
-                className='w-32 h-32 mb-6'
+                className='w-32 h-32 mb-3 mx-auto'
               />
+              <div className='text-xl text-white mb-3 mx-auto'>FriendVault</div>
             </div>
+            {groupId ? (
+              <div className='flex justify-center'>
+                <button
+                  className='py-3 rounded-md border border-green-500 hover:text-white hover:bg-transparent transition-all duration-300 w-32 text-slate-600 bg-green-400 flex  justify-center gap-4  '
+                  onClick={() => setOpen(true)}
+                >
+                  <IconPlus></IconPlus>
+                  New
+                </button>
+              </div>
+            ) : null}
             <nav className='flex flex-1 flex-col'>
-              <ul role='list' className='flex flex-1 flex-col gap-y-7'>
+              <ul role='list' className='flex flex-1 flex-col gap-y-7 mt-3'>
                 <li>
                   <ul role='list' className='-mx-2 space-y-2'>
                     {navigation.map((item) => (
@@ -190,14 +228,14 @@ export default function Example({ children }: any) {
                     ))}
                   </ul>
                 </li>
-                
+
                 <li className='mt-auto'>
                   <a
                     className='group -mx-2 flex w-full gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-400 hover:bg-gray-800 hover:text-white'
-                  onClick={handleClick}
-                  href='/'
+                    onClick={handleClick}
+                    href='/'
                   >
-                   <IconLogout/>
+                    <IconLogout />
                     Logout
                   </a>
                 </li>
@@ -246,8 +284,6 @@ export default function Example({ children }: any) {
                   className='hidden lg:block lg:h-6 lg:w-px lg:bg-gray-900/10'
                   aria-hidden='true'
                 />
-
-                
               </div>
             </div>
           </div>
@@ -257,6 +293,12 @@ export default function Example({ children }: any) {
           </main>
         </div>
       </div>
+
+      <AddContent
+        open={open}
+        handleClose={handleClose}
+        handleSave={handleSave}
+      />
     </>
   );
 }

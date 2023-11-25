@@ -20,9 +20,9 @@ app.use(
   })
 );
 
-app.get('/vault/service', (req,res) => {
-  return res.json("Server is running")
-})
+app.get('/vault/service', (req, res) => {
+  return res.json('Server is running');
+});
 
 //Auth
 app.use('/vault/service/api/auth', authRoutes);

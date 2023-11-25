@@ -14,10 +14,10 @@ const isUserInGroup = async (req, res, next) => {
     if (members.includes(req.id)) {
       next();
     } else {
-      return res.json('You do not belong to the group');
+      return res.status(404).json('You do not belong to the group');
     }
   } catch (error) {
-    return res.json('No such group');
+    return res.status(404).json('No such group');
   }
 };
 
