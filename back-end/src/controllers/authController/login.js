@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const prisma = require('../../dbConnect/connection');
 
 const login = async (req, res) => {
@@ -24,15 +24,12 @@ const login = async (req, res) => {
       });
 
       // this token should be stored in the client as it is used for authentication and authorization in the later requests
-      res
-
-        .status(200)
-        .json({
-          username: userExists.username,
-          email: userExists.email,
-          token: token,
-          id: userExists.id,
-        });
+      res.status(200).json({
+        username: userExists.username,
+        email: userExists.email,
+        token: token,
+        id: userExists.id,
+      });
     }
   } catch (err) {
     res.status(404).json('User not found');
