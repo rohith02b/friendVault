@@ -7,6 +7,8 @@ import { IconFileFilled } from '@tabler/icons-react';
 import error from '../assets/error.json';
 import Lottie from 'lottie-react';
 import GlobalLoader from '../GlobalLoader';
+import nofolder from '../assets/nofolders.json';
+import nofiles from '../assets/nofiles.json';
 
 const Group = () => {
   const [allFolders, setAllFolders] = useState([]);
@@ -76,9 +78,9 @@ const Group = () => {
   }
   return (
     <Layout>
-      <div className='h3'>Folders</div>
+      <div className='h3 mt-6 text-3xl'>Folders</div>
       {allFolders?.length > 0 ? (
-        <div className='grid grid-cols-3 sm:grid-cols-5 xl:grid-cols-8 mt-8 gap-8'>
+        <div className='grid grid-cols-2 sm:grid-cols-4 xl:grid-cols-6 mt-8 gap-8'>
           {allFolders?.map((each: any) => {
             const truncatedName =
               each.content_name.length > 20
@@ -87,7 +89,7 @@ const Group = () => {
             return (
               <div
                 key={each.id}
-                className='p-3 hover:bg-blue-100 w-48 rounded-lg transition-all duration-200 flex-col justify-center items-center cursor-pointer'
+                className='p-3 hover:bg-blue-100  bg-slate-200  rounded-lg transition-all duration-200 flex-col justify-center items-center cursor-pointer '
                 onClick={() => handleClick(each.content_name)}
               >
                 <IconFolderFilled width={60} height={50} className='mx-auto' />
@@ -97,10 +99,12 @@ const Group = () => {
           })}
         </div>
       ) : (
-        <div className='grid place-items-center mt-6'>No Folders</div>
+        <div className='grid place-items-center mt-6'>
+          <Lottie animationData={nofolder} className='w-[70%] md:w-[20%]' />
+        </div>
       )}
-
-      <div className='h3 mt-12'>Files</div>
+      <div className='border border-lg border-slate-100 mt-6'></div>
+      <div className='h3 mt-8 text-3xl'>Files</div>
       {allFiles?.length > 0 ? (
         <div className='grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-6 mt-8 gap-10'>
           {allFiles?.map((each: any) => {
@@ -108,10 +112,18 @@ const Group = () => {
               each.content_name.length > 20
                 ? `${each.content_name.substring(0, 20)}...`
                 : each.content_name;
+
+            // let extension = each.content_name.split('.')[1];
+            // let type = imageExtensions.includes(extension)
+            //   ? 'image'
+            //   : videoExtensions.includes(extension)
+            //   ? 'video'
+            //   : null;
+
             return (
               <Link
                 key={each.id}
-                className='p-3 hover:bg-blue-100 w-48  rounded-lg transition-all duration-200 flex-column justify-center items-center cursor-pointer'
+                className='p-3 hover:bg-blue-100  bg-slate-200  rounded-lg transition-all duration-200 flex-column justify-center items-center cursor-pointer'
                 to={`${each.url}`}
                 title={each.content_name}
               >
@@ -122,7 +134,9 @@ const Group = () => {
           })}
         </div>
       ) : (
-        <div className='grid place-items-center'>No Content</div>
+        <div className='grid place-items-center'>
+          <Lottie animationData={nofiles} className='w-[100%] md:w-[30%]' />
+        </div>
       )}
     </Layout>
   );

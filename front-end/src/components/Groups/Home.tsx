@@ -6,6 +6,8 @@ import CreateGroup from './CreateGroup';
 import { PlusIcon } from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
 import { IconFolderFilled } from '@tabler/icons-react';
+import Lottie from 'lottie-react';
+import nogroups from '../assets/nogroups.json';
 
 const Home = () => {
   const [groups, setGroups] = useState<Array<any>>();
@@ -59,7 +61,12 @@ const Home = () => {
           })}
         </div>
       ) : (
-        <div className='grid place-items-center'>No Groups</div>
+        <div className='grid place-items-center'>
+          <Lottie
+            animationData={nogroups}
+            className='w-[100%] md:w-[50%] lg:w-[40%]'
+          />
+        </div>
       )}
 
       <CreateGroup open={open} setOpen={setOpen} handleClose={handleClose} />
