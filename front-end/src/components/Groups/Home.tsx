@@ -8,16 +8,22 @@ import { Link } from 'react-router-dom';
 import { IconFolderFilled } from '@tabler/icons-react';
 import Lottie from 'lottie-react';
 import nogroups from '../assets/nogroups.json';
+import fetchLoading from '../assets/fetch-loading.json';
 
 const Home = () => {
   const [groups, setGroups] = useState<Array<any>>();
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const fetchGroups = () => {
+    setLoading(true);
     axios
       .get(`/api/groups/`)
       .then((response: any) => {
-        setGroups(response?.data);
+        setTimeout(() => {
+          setGroups(response?.data);
+          setLoading(false);
+        }, 1000);
       })
       .catch((error: any) => {
         console.log(error);
@@ -45,28 +51,36 @@ const Home = () => {
       </div>
 
       <div className='bg-slate-100 w-full mb-6 h-0.5' />
-      {groups?.length > 0 ? (
-        <div className='grid grid-cols-3 sm:grid-cols-5 xl:grid-cols-8 mt-8 gap-8'>
-          {groups?.map((each: any) => {
-            return (
-              <Link
-                key={each.code}
-                className='p-3 hover:bg-blue-100 rounded-lg transition-all duration-200 flex justify-center flex-col items-center cursor-pointer'
-                to={`${each.id}`}
-              >
-                <IconFolderFilled width={60} height={60} />
-                <div className='mt-3 text-center'>{each.name}</div>
-              </Link>
-            );
-          })}
+      {loading ? (
+        <div className='mt-12'>
+          <Lottie className='h-32' animationData={fetchLoading} />
         </div>
       ) : (
-        <div className='grid place-items-center'>
-          <Lottie
-            animationData={nogroups}
-            className='w-[100%] md:w-[50%] lg:w-[40%]'
-          />
-        </div>
+        <>
+          {groups?.length > 0 ? (
+            <div className='grid grid-cols-3 sm:grid-cols-5 xl:grid-cols-8 mt-8 gap-8'>
+              {groups?.map((each: any) => {
+                return (
+                  <Link
+                    key={each.code}
+                    className='p-3 hover:bg-blue-100 rounded-lg transition-all duration-200 flex justify-center flex-col items-center cursor-pointer'
+                    to={`${each.id}`}
+                  >
+                    <IconFolderFilled width={60} height={60} />
+                    <div className='mt-3 text-center'>{each.name}</div>
+                  </Link>
+                );
+              })}
+            </div>
+          ) : (
+            <div className='grid place-items-center'>
+              <Lottie
+                animationData={nogroups}
+                className='w-[100%] md:w-[50%] lg:w-[40%]'
+              />
+            </div>
+          )}
+        </>
       )}
 
       <CreateGroup open={open} setOpen={setOpen} handleClose={handleClose} />

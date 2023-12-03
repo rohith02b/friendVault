@@ -5,8 +5,6 @@ import { MagnifyingGlassIcon } from '@heroicons/react/20/solid';
 import 'animate.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { IconSettings, IconLogout } from '@tabler/icons-react';
-import { IconPlus } from '@tabler/icons-react';
-import AddContent from '../AddContent';
 import { useParams } from 'react-router-dom';
 
 const navigation = [
@@ -115,20 +113,6 @@ export default function Example({ children }: any) {
                           FriendVault
                         </div>
                       </div>
-                      {groupId ? (
-                        <div className='flex justify-center'>
-                          <button
-                            className='py-3 rounded-md border border-green-500 hover:text-white hover:bg-transparent transition-all duration-300 w-32 text-slate-600 bg-green-400 flex  justify-center gap-4  '
-                            onClick={() => {
-                              setOpen(true);
-                              setSidebarOpen(false);
-                            }}
-                          >
-                            <IconPlus></IconPlus>
-                            New
-                          </button>
-                        </div>
-                      ) : null}
 
                       <ul
                         role='list'
@@ -189,17 +173,7 @@ export default function Example({ children }: any) {
               />
               <div className='text-xl text-white mb-3 mx-auto'>FriendVault</div>
             </div>
-            {groupId ? (
-              <div className='flex justify-center'>
-                <button
-                  className='py-3 rounded-md border border-green-500 hover:text-white hover:bg-transparent transition-all duration-300 w-32 text-slate-600 bg-green-400 flex  justify-center gap-4  '
-                  onClick={() => setOpen(true)}
-                >
-                  <IconPlus></IconPlus>
-                  New
-                </button>
-              </div>
-            ) : null}
+
             <nav className='flex flex-1 flex-col'>
               <ul role='list' className='flex flex-1 flex-col gap-y-7 mt-3'>
                 <li>
@@ -290,12 +264,6 @@ export default function Example({ children }: any) {
           </main>
         </div>
       </div>
-
-      <AddContent
-        open={open}
-        handleClose={handleClose}
-        handleSave={handleSave}
-      />
     </>
   );
 }
