@@ -170,7 +170,7 @@ const Group = () => {
                     : each.content_name;
                 return (
                   <div
-                    key={each.id}
+                    key={each.content_id}
                     className='p-3 hover:bg-blue-100  bg-slate-200  rounded-lg transition-all duration-200 flex-col justify-center items-center cursor-pointer '
                     onClick={() => handleClick(each.content_name)}
                   >
@@ -220,10 +220,9 @@ const Group = () => {
                     : each.content_name;
 
                 return (
-                  <Link
-                    key={each.id}
+                  <button
+                    key={each.content_id}
                     className='p-5 hover:bg-blue-100  bg-slate-200  rounded-lg transition-all duration-200 flex-column justify-center items-center cursor-pointer'
-                    to={`${each.url}`}
                     title={each.content_name}
                   >
                     {each.uploaded ? (
@@ -245,7 +244,7 @@ const Group = () => {
                     )}
 
                     <div className='mt-1 text-center'>{truncatedName}</div>
-                  </Link>
+                  </button>
                 );
               })}
             </div>

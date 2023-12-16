@@ -1,22 +1,29 @@
-const prisma = require('../../dbConnect/connection')
+const prisma = require('../../dbConnect/connection');
 
-const getFolderContent = async (req,res) => {
+const getFolderContent = async (req, res) => {
+  const { groupId } = req.params;
+  const { path } = req.query;
 
- const { groupId } = req.params;
- const { path } = req.query
+  try {
+    const content = await prisma.content.findMany({
+      where: {
+        group_id: groupId,
+        path: path || '/',
+      },
+      select: {
+        content_id: true,
+        content_name: true,
+        content_type: true,
+        group_id: true,
+        uploaded: true,
+        path: true,
+      },
+    });
 
- try {
-  const content = await prisma.content.findMany({
-   where  : {
-    group_id : groupId,
-    path : path || '/'
-   }
-  })
+    res.json(content);
+  } catch (error) {
+    res.json('Error');
+  }
+};
 
-  res.json(content)
- } catch (error) {
-  res.json('Error')
- }
-}
-
-module.exports = { getFolderContent }
+module.exports = { getFolderContent };
