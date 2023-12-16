@@ -51,6 +51,7 @@ const Home = () => {
       </div>
 
       <div className='bg-slate-100 w-full mb-6 h-0.5' />
+      <div className='h3 text-3xl'>Groups</div>
       {loading ? (
         <div className='mt-12'>
           <Lottie className='h-32' animationData={fetchLoading} />
@@ -63,7 +64,7 @@ const Home = () => {
                 return (
                   <Link
                     key={each.code}
-                    className='p-3 hover:bg-blue-100 rounded-lg transition-all duration-200 flex justify-center flex-col items-center cursor-pointer'
+                    className='p-3 hover:bg-blue-100 rounded-lg bg-slate-100 transition-all duration-200 flex justify-center flex-col items-center cursor-pointer'
                     to={`${each.id}`}
                   >
                     <IconFolderFilled width={60} height={60} />

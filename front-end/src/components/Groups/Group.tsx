@@ -26,6 +26,7 @@ const Group = () => {
   const [folderOpen, setFolderOpen] = useState(false);
 
   const fetchContent = () => {
+    console.log('called fetch');
     setLoading(true);
     axios
       .get(`/api/files/${groupId}`, {
@@ -52,6 +53,37 @@ const Group = () => {
           }
           setLoading(false);
         }, 1000);
+      })
+      .catch((error: any) => {
+        setError(error?.response?.data);
+      })
+      .then(() => {});
+  };
+
+  const fetchRepeatedlyUntilUpload = () => {
+    axios
+      .get(`/api/files/${groupId}`, {
+        params: {
+          path: `/${path}`,
+        },
+      })
+      .then((response: any) => {
+        if (response?.data) {
+          const data = response?.data;
+          let files = [];
+          let folders = [];
+          data?.map((each: any) => {
+            if (each?.content_type === 'file') {
+              files.push(each);
+            } else {
+              folders.push(each);
+            }
+          });
+
+          setAllFiles(files);
+          setAllFolders(folders);
+        }
+        setLoading(false);
       })
       .catch((error: any) => {
         setError(error?.response?.data);
@@ -98,6 +130,17 @@ const Group = () => {
       </div>
     );
   }
+
+  useEffect(() => {
+    if (allFiles) {
+      const shouldFetchAgain = allFiles.some((item) => !item.uploaded);
+      if (shouldFetchAgain) {
+        setTimeout(() => {
+          fetchRepeatedlyUntilUpload();
+        }, 10000);
+      }
+    }
+  }, [allFiles]);
 
   return (
     <Layout>
@@ -172,16 +215,9 @@ const Group = () => {
             <div className='grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-6 mt-8 gap-10'>
               {allFiles?.map((each: any) => {
                 const truncatedName =
-                  each.content_name.length > 20
+                  each.content_name.length > 15
                     ? `${each.content_name.substring(0, 16)}...`
                     : each.content_name;
-
-                // let extension = each.content_name.split('.')[1];
-                // let type = imageExtensions.includes(extension)
-                //   ? 'image'
-                //   : videoExtensions.includes(extension)
-                //   ? 'video'
-                //   : null;
 
                 return (
                   <Link
@@ -190,34 +226,46 @@ const Group = () => {
                     to={`${each.url}`}
                     title={each.content_name}
                   >
-                    <IconFileFilled
-                      width={40}
-                      height={40}
-                      className='mx-auto'
-                    />
+                    {each.uploaded ? (
+                      <IconFileFilled
+                        width={40}
+                        height={40}
+                        className='mx-auto'
+                      />
+                    ) : (
+                      <>
+                        <Lottie
+                          className='h-12 w-12 mx-auto'
+                          animationData={fetchLoading}
+                        />
+                        <div className='text-[15px] text-center -mt-2'>
+                          Uploading
+                        </div>
+                      </>
+                    )}
+
                     <div className='mt-1 text-center'>{truncatedName}</div>
                   </Link>
                 );
               })}
-
-              <UploadFiles
-                open={open}
-                setOpen={setOpen}
-                handleSuccess={handleSuccess}
-                handleError={handleError}
-              />
-              <UploadFolder
-                open={folderOpen}
-                setOpen={setFolderOpen}
-                handleSuccess={handleSuccess}
-                handleError={handleError}
-              />
             </div>
           ) : (
             <div className='grid place-items-center'>
               <Lottie animationData={nofiles} className='w-[100%] md:w-[30%]' />
             </div>
           )}
+          <UploadFiles
+            open={open}
+            setOpen={setOpen}
+            handleSuccess={handleSuccess}
+            handleError={handleError}
+          />
+          <UploadFolder
+            open={folderOpen}
+            setOpen={setFolderOpen}
+            handleSuccess={handleSuccess}
+            handleError={handleError}
+          />
         </>
       )}
     </Layout>

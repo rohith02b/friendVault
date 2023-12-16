@@ -4,11 +4,18 @@ import { Bars3Icon, HomeIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid';
 import 'animate.css';
 import { Link, useNavigate } from 'react-router-dom';
-import { IconSettings, IconLogout } from '@tabler/icons-react';
+import {
+  IconSettings,
+  IconLogout,
+  IconStarFilled,
+  IconFiles,
+} from '@tabler/icons-react';
 import { useParams } from 'react-router-dom';
 
 const navigation = [
   { name: 'Home', href: '/', icon: HomeIcon, current: true },
+  { name: 'Personal Files', href: '/', icon: IconFiles, current: false },
+  { name: 'Starred', href: '/', icon: IconStarFilled, current: false },
   { name: 'Settings', href: '/', icon: IconSettings, current: false },
 ];
 const teams = [
