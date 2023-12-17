@@ -41,12 +41,13 @@ const uploadFile = async (req, res) => {
           path: req.query.path || '/',
           content_name: file.originalname,
           content_type: 'file',
+          content_mimetype: file.mimetype,
           uploaded: false,
         },
       });
 
       if (fileSize > 100 * 1024 * 1024) {
-        const azCopyCommand = `./azcopy copy "../../../${filePath}" "${containerClient.url}/${path}?${sas}"`;
+        const azCopyCommand = `./azcopy copy "../../../${filePath}" "${containerClient.url}/${path}?${sas}" --content-type="${file.mimetype}"`;
 
         try {
           await execPromise(azCopyCommand, options).then(async () => {
@@ -61,7 +62,11 @@ const uploadFile = async (req, res) => {
         }
       } else {
         const blockBlobClient = containerClient.getBlockBlobClient(path);
-        await blockBlobClient.uploadFile(filePath);
+        await blockBlobClient.uploadFile(filePath, {
+          blobHTTPHeaders: {
+            blobContentType: file.mimetype,
+          },
+        });
         await prisma.content.update({
           where: { content_id: id },
           data: { url: blockBlobClient.url, uploaded: true },

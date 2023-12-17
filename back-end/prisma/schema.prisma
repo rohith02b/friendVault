@@ -32,5 +32,6 @@ model content {
   path String 
   content_name String
   content_type String
+  content_mimetype String
   uploaded Boolean
 }

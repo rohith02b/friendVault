@@ -24,9 +24,9 @@ const Group = () => {
   const [err, setError] = useState('');
   const [open, setOpen] = useState(false);
   const [folderOpen, setFolderOpen] = useState(false);
+  const SERVER_URL = import.meta.env.VITE_AUTH_SERVICE_URL;
 
   const fetchContent = () => {
-    console.log('called fetch');
     setLoading(true);
     axios
       .get(`/api/files/${groupId}`, {
@@ -36,6 +36,7 @@ const Group = () => {
       })
       .then((response: any) => {
         setTimeout(() => {
+          console.log(response);
           if (response?.data) {
             const data = response?.data;
             let files = [];
@@ -131,6 +132,46 @@ const Group = () => {
     );
   }
 
+  const handleDownloadFile = (
+    content_id: string,
+    content_type: string,
+    content_name: string
+  ) => {
+    axios
+      .get(`/api/files/${groupId}/${content_id}/download`, {
+        params: {
+          path: path || '',
+        },
+      })
+      .then(async (response: any) => {
+        toast.success('File downloaded successfully.');
+        const res = await axios({
+          method: 'GET',
+          url: `${SERVER_URL}/${response?.data}`, // Replace with your API endpoint
+          responseType: 'arraybuffer', // Ensure to receive binary data
+        });
+
+        // Create a Blob from the binary data received
+        const blob = new Blob([res.data], {
+          type: content_type,
+        });
+
+        // Create a URL for the Blob object
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `${content_name}`; // Set the filename here
+        document.body.appendChild(link);
+        link.click();
+
+        // Clean up
+        URL.revokeObjectURL(url);
+        document.body.removeChild(link);
+
+        toast.success('File downloaded successfully.');
+      });
+  };
+
   useEffect(() => {
     if (allFiles) {
       const shouldFetchAgain = allFiles.some((item) => !item.uploaded);
@@ -224,6 +265,13 @@ const Group = () => {
                     key={each.content_id}
                     className='p-5 hover:bg-blue-100  bg-slate-200  rounded-lg transition-all duration-200 flex-column justify-center items-center cursor-pointer'
                     title={each.content_name}
+                    onClick={() =>
+                      handleDownloadFile(
+                        each.content_id,
+                        each.content_mimetype,
+                        each.content_name
+                      )
+                    }
                   >
                     {each.uploaded ? (
                       <IconFileFilled

@@ -2,6 +2,7 @@ const router = require('express').Router();
 const multer = require('multer');
 const { uploadFile } = require('../controllers/filesController/uploadFile');
 const { createFolder } = require('../controllers/filesController/createFolder');
+const { downloadBlob } = require('../controllers/filesController/downloadBlob');
 const { isUserValid } = require('../middleware/isUserValid');
 const { isUserInGroup } = require('../middleware/isUserInGroup');
 const {
@@ -21,6 +22,13 @@ router.post(
   isUserValid,
   isUserInGroup,
   uploadFile
+);
+
+router.get(
+  '/:groupId/:content_id/download',
+  isUserValid,
+  isUserInGroup,
+  downloadBlob
 );
 
 // create a folder

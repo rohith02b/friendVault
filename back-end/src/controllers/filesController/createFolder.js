@@ -15,6 +15,7 @@ const createFolder = async (req, res) => {
         path: path || '/',
         content_name: name,
         content_type: 'folder',
+        content_mimetype: 'application/folder',
         uploaded: true,
       },
     });

@@ -15,6 +15,7 @@ const getFolderContent = async (req, res) => {
         content_name: true,
         content_type: true,
         group_id: true,
+        content_mimetype: true,
         uploaded: true,
         path: true,
       },
