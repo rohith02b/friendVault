@@ -152,6 +152,7 @@ const Group = () => {
 
         setTimeout(() => {
           const link = document.createElement('a');
+          link.href = decodeURIComponent(url);
           link.target = '_blank';
           document.body.appendChild(link);
           link.click();
