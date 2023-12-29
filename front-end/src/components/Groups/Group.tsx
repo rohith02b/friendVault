@@ -12,6 +12,7 @@ import UploadFiles from './UploadFiles';
 import { toast, Toaster } from 'sonner';
 import fetchLoading from '../assets/fetch-loading.json';
 import UploadFolder from './UploadFolder';
+import { BlobServiceClient } from '@azure/storage-blob';
 
 const Group = () => {
   const [allFolders, setAllFolders] = useState([]);
@@ -36,7 +37,6 @@ const Group = () => {
       })
       .then((response: any) => {
         setTimeout(() => {
-          console.log(response);
           if (response?.data) {
             const data = response?.data;
             let files = [];
@@ -61,7 +61,7 @@ const Group = () => {
       .then(() => {});
   };
 
-  const fetchRepeatedlyUntilUpload = () => {
+  const fetchUpdateContent = () => {
     axios
       .get(`/api/files/${groupId}`, {
         params: {
@@ -84,7 +84,6 @@ const Group = () => {
           setAllFiles(files);
           setAllFolders(folders);
         }
-        setLoading(false);
       })
       .catch((error: any) => {
         setError(error?.response?.data);
@@ -107,11 +106,15 @@ const Group = () => {
   }, [path]);
 
   const handleSuccess = (type: any) => {
-    if (type === 'files') toast.success('Uploaded successfully');
-    else {
+    if (type === 'files') {
+      toast.success('Uploaded successfully');
+      fetchContent();
+    } else if (type === 'UpdatedFile') {
+      fetchUpdateContent();
+    } else {
       toast.success('Created successfully');
+      fetchContent();
     }
-    fetchContent();
   };
 
   const handleError = () => {
@@ -132,7 +135,7 @@ const Group = () => {
     );
   }
 
-  const handleDownloadFile = (
+  const handleDownloadFile = async (
     content_id: string,
     content_type: string,
     content_name: string
@@ -144,44 +147,21 @@ const Group = () => {
         },
       })
       .then(async (response: any) => {
-        toast.success('File downloaded successfully.');
-        const res = await axios({
-          method: 'GET',
-          url: `${SERVER_URL}/${response?.data}`, // Replace with your API endpoint
-          responseType: 'arraybuffer', // Ensure to receive binary data
-        });
+        const url = response?.data?.url;
+        toast.success('Downloaded successfully');
 
-        // Create a Blob from the binary data received
-        const blob = new Blob([res.data], {
-          type: content_type,
-        });
+        setTimeout(() => {
+          const link = document.createElement('a');
+          link.target = '_blank';
+          document.body.appendChild(link);
+          link.click();
 
-        // Create a URL for the Blob object
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = `${content_name}`; // Set the filename here
-        document.body.appendChild(link);
-        link.click();
-
-        // Clean up
-        URL.revokeObjectURL(url);
-        document.body.removeChild(link);
-
-        toast.success('File downloaded successfully.');
+          // Clean up
+          URL.revokeObjectURL(url);
+          document.body.removeChild(link);
+        }, 2000);
       });
   };
-
-  useEffect(() => {
-    if (allFiles) {
-      const shouldFetchAgain = allFiles.some((item) => !item.uploaded);
-      if (shouldFetchAgain) {
-        setTimeout(() => {
-          fetchRepeatedlyUntilUpload();
-        }, 10000);
-      }
-    }
-  }, [allFiles]);
 
   return (
     <Layout>

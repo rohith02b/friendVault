@@ -5,6 +5,7 @@ import axios from '../../axiosInstance';
 import React, { Fragment, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import GlobalLoader from '../GlobalLoader';
+import uniqueId from 'uniqid';
 
 const UploadFiles = ({ open, setOpen, handleSuccess, handleError }) => {
   const BASEURL = import.meta.env.VITE_AUTH_SERVICE_URL;
@@ -17,25 +18,32 @@ const UploadFiles = ({ open, setOpen, handleSuccess, handleError }) => {
     },
 
     onSubmit: (values: any) => {
-      setLoading(true);
-      const formData = new FormData();
-      if (values.fileUpload && values.fileUpload.length > 0) {
-        for (let i = 0; i < values.fileUpload.length; i++) {
-          formData.append(`files`, values.fileUpload[i]);
-        }
-      }
+      const fileData = [];
+      values.fileUpload.map((each: any) => {
+        fileData.push({
+          content_id: uniqueId.time(),
+          group_id: groupId,
+          url: 'Not generated yet',
+          path: '/' + path,
+          content_name: each.name,
+          content_type: 'file',
+          content_mimetype: each.type,
+          uploaded: false,
+        });
+      });
 
       axios
-        .post(`/api/files/${groupId}`, formData, {
-          params: {
-            path: `/${path}`,
-          },
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        })
+        .post(`/api/files/${groupId}`, fileData)
         .then((response: any) => {
-          console.log(response);
+          setTimeout(() => {
+            values.fileUpload.map((file: any, idx: number) => {
+              uploadFileWithSas(
+                file,
+                response?.data?.url,
+                fileData[idx].content_id
+              );
+            });
+          }, 2000);
           formik.resetForm();
           handleSuccess('files');
         })
@@ -48,6 +56,39 @@ const UploadFiles = ({ open, setOpen, handleSuccess, handleError }) => {
         });
     },
   });
+
+  const uploadFileWithSas = async (file, url, content_id) => {
+    const sasUrl = url.split('?');
+    const id = uniqueId.time();
+    const name = file.name.split('.');
+    const fileUrl =
+      sasUrl[0] +
+      `/${groupId}/${path}/${name[0]}-${id}.${name[1]}?` +
+      sasUrl[1];
+
+    try {
+      const response = await fetch(fileUrl, {
+        method: 'PUT',
+        body: file,
+        headers: {
+          'Content-Type': file.type,
+          'x-ms-blob-type': 'BlockBlob',
+        },
+      });
+
+      if (response.ok) {
+        await axios.put(`/api/files/${groupId}`, {
+          content_id: content_id,
+          url: decodeURIComponent(response.url.split('?')[0]),
+        });
+        handleSuccess('UpdatedFile');
+      } else {
+        console.error('Error uploading file:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error uploading file:', error);
+    }
+  };
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -106,7 +147,6 @@ const UploadFiles = ({ open, setOpen, handleSuccess, handleError }) => {
                                 name='fileUpload'
                                 type='file'
                                 className='sr-only'
-                                // Remove the value attribute to let React manage the input value
                                 onChange={(event) => {
                                   // Check if files were selected
                                   if (event.currentTarget.files) {

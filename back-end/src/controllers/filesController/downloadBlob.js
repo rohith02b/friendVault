@@ -1,11 +1,14 @@
 const prisma = require('../../dbConnect/connection');
-const { BlobServiceClient } = require('@azure/storage-blob');
-const fs = require('fs');
+const {
+  BlobServiceClient,
+  BlobSASPermissions,
+} = require('@azure/storage-blob');
 
 const connectionString = process.env.CONNECTION_STRING;
 const blobServiceClient =
   BlobServiceClient.fromConnectionString(connectionString);
 const container = process.env.CONTAINER;
+const sas = process.env.SAS_TOKEN;
 const containerClient = blobServiceClient.getContainerClient(container);
 
 const downloadBlob = async (req, res) => {
@@ -23,42 +26,28 @@ const downloadBlob = async (req, res) => {
   let fileName = url[url.length - 1];
   let decodedFileName = decodeURIComponent(fileName);
 
-  const blobClient = containerClient.getBlobClient(
+  const tempUrl = await generateSasToken(
     `${groupId}/${path}/${decodedFileName}`
   );
 
-  try {
-    const downloadResponse = await blobClient.download();
-    const downloadedData = await streamToBuffer(
-      downloadResponse.readableStreamBody
-    );
-
-    // Specify the path where you want to save the downloaded blob
-    const filePath = `downloads/${result.content_name}`; // Replace with your desired file path
-
-    // Save the downloaded blob to the specified path
-    fs.writeFileSync(filePath, downloadedData);
-  } catch (error) {
-    console.error('Error:', error);
-  }
-
-  setTimeout(() => {
-    fs.unlinkSync(`downloads/${result.content_name}`);
-  }, 10000);
-  return res.json(`downloads/${result.content_name}`);
+  return res.json({
+    url: tempUrl,
+  });
 };
 
-async function streamToBuffer(readableStream) {
-  return new Promise((resolve, reject) => {
-    const chunks = [];
-    readableStream.on('data', (data) => {
-      chunks.push(data instanceof Buffer ? data : Buffer.from(data));
-    });
-    readableStream.on('end', () => {
-      resolve(Buffer.concat(chunks));
-    });
-    readableStream.on('error', reject);
-  });
-}
+const generateSasToken = async (blobName) => {
+  const expiryTime = new Date();
+  expiryTime.setHours(expiryTime.getMinutes() + 10);
+
+  const sasOptions = {
+    startsOn: new Date(),
+    expiresOn: expiryTime,
+    permissions: BlobSASPermissions.parse('r'),
+  };
+
+  const blobClient = containerClient.getBlobClient(blobName);
+  const sasToken = blobClient.generateSasUrl(sasOptions);
+  return sasToken;
+};
 
 module.exports = { downloadBlob };
