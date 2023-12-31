@@ -9,6 +9,7 @@ const {
   getFolderContent,
 } = require('../controllers/filesController/getFolderContent');
 const dotenv = require('dotenv');
+const { deleteFile } = require('../controllers/filesController/deleteFile');
 dotenv.config();
 
 router.get('/:groupId', isUserValid, isUserInGroup, getFolderContent);
@@ -26,5 +27,8 @@ router.post('/:groupId', isUserValid, isUserInGroup, uploadFile);
 router.post('/create/:groupId', isUserValid, isUserInGroup, createFolder);
 
 router.put('/:groupId', isUserValid, isUserInGroup, updateFile);
+
+router.delete('/:groupId', isUserValid, isUserInGroup, deleteFile);
+
 
 module.exports = router;

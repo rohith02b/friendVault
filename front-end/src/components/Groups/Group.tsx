@@ -12,20 +12,21 @@ import UploadFiles from './UploadFiles';
 import { toast, Toaster } from 'sonner';
 import fetchLoading from '../assets/fetch-loading.json';
 import UploadFolder from './UploadFolder';
-import { BlobServiceClient } from '@azure/storage-blob';
+import ConfirmDelete from '../common/ConfirmDelete';
 
 const Group = () => {
   const [allFolders, setAllFolders] = useState([]);
   const [loading, setLoading] = useState(false);
   const [allFiles, setAllFiles] = useState([]);
   const { groupId, '*': path } = useParams();
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [folder, setFolder] = useState<any>(`/${path}`);
+  const [idToBeDeleted, setIdToBeDeleted] = useState('');
   const location = useLocation();
   const navigate = useNavigate();
   const [err, setError] = useState('');
   const [open, setOpen] = useState(false);
   const [folderOpen, setFolderOpen] = useState(false);
-  const SERVER_URL = import.meta.env.VITE_AUTH_SERVICE_URL;
 
   const fetchContent = () => {
     setLoading(true);
@@ -160,8 +161,36 @@ const Group = () => {
           // Clean up
           URL.revokeObjectURL(url);
           document.body.removeChild(link);
-        }, 2000);
+        }, 5000);
       });
+  };
+
+  const handleDelete = (content_id: string) => {
+    setIdToBeDeleted(content_id);
+    setDeleteModalOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    setLoading(true);
+    axios
+      .delete(`/api/files/${groupId}`, {
+        data: [idToBeDeleted],
+      })
+      .then((response: any) => {
+        toast.success(response?.data);
+        setDeleteModalOpen(false);
+        setIdToBeDeleted('');
+      })
+      .catch(() => {
+        toast.error('Unable to delete');
+      })
+      .finally(() => {
+        fetchContent();
+      });
+  };
+  const handleCancel = () => {
+    setDeleteModalOpen(false);
+    setIdToBeDeleted('');
   };
 
   return (
@@ -234,7 +263,7 @@ const Group = () => {
       ) : (
         <>
           {allFiles?.length > 0 ? (
-            <div className='grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-6 mt-8 gap-10'>
+            <div className='grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 mt-8 gap-10'>
               {allFiles?.map((each: any) => {
                 const truncatedName =
                   each.content_name.length > 15
@@ -242,17 +271,10 @@ const Group = () => {
                     : each.content_name;
 
                 return (
-                  <button
+                  <div
                     key={each.content_id}
                     className='p-5 hover:bg-blue-100  bg-slate-200  rounded-lg transition-all duration-200 flex-column justify-center items-center cursor-pointer'
                     title={each.content_name}
-                    onClick={() =>
-                      handleDownloadFile(
-                        each.content_id,
-                        each.content_mimetype,
-                        each.content_name
-                      )
-                    }
                   >
                     {each.uploaded ? (
                       <IconFileFilled
@@ -273,7 +295,29 @@ const Group = () => {
                     )}
 
                     <div className='mt-1 text-center'>{truncatedName}</div>
-                  </button>
+                    {each.uploaded ? (
+                      <div className='mt-4 flex justify-center gap-3'>
+                        <button
+                          className='px-4 py-2 border border-md border-slate-900 hover:bg-green-500 hover:text-white transition-all duration-200 rounded-md'
+                          onClick={() =>
+                            handleDownloadFile(
+                              each.content_id,
+                              each.content_mimetype,
+                              each.content_name
+                            )
+                          }
+                        >
+                          View
+                        </button>
+                        <button
+                          className='px-4 py-2 border border-md border-slate-900 hover:bg-red-500 hover:text-white transition-all duration-200 rounded-md'
+                          onClick={() => handleDelete(each.content_id)}
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    ) : null}
+                  </div>
                 );
               })}
             </div>
@@ -293,6 +337,12 @@ const Group = () => {
             setOpen={setFolderOpen}
             handleSuccess={handleSuccess}
             handleError={handleError}
+          />
+          <ConfirmDelete
+            open={deleteModalOpen}
+            setOpen={setDeleteModalOpen}
+            handleConfirmDelete={handleConfirmDelete}
+            handleCancel={handleCancel}
           />
         </>
       )}
