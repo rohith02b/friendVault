@@ -2,7 +2,11 @@ import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import Layout from '../Layouts/Layout';
 import { useEffect, useState } from 'react';
 import axios from '../../axiosInstance';
-import { IconFolderFilled, IconUpload } from '@tabler/icons-react';
+import {
+  IconAlertTriangleFilled,
+  IconFolderFilled,
+  IconUpload,
+} from '@tabler/icons-react';
 import { IconFileFilled } from '@tabler/icons-react';
 import error from '../assets/error.json';
 import Lottie from 'lottie-react';
@@ -13,6 +17,7 @@ import { toast, Toaster } from 'sonner';
 import fetchLoading from '../assets/fetch-loading.json';
 import UploadFolder from './UploadFolder';
 import ConfirmDelete from '../common/ConfirmDelete';
+import ContentViewer from './ContentViewer';
 
 const Group = () => {
   const [allFolders, setAllFolders] = useState([]);
@@ -22,6 +27,9 @@ const Group = () => {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [folder, setFolder] = useState<any>(`/${path}`);
   const [idToBeDeleted, setIdToBeDeleted] = useState('');
+  const [openContentViewer, setContentViewer] = useState(false);
+  const [contentUrl, setContentUrl] = useState('');
+  const [contentType, setContentType] = useState('');
   const location = useLocation();
   const navigate = useNavigate();
   const [err, setError] = useState('');
@@ -120,21 +128,8 @@ const Group = () => {
 
   const handleError = () => {
     toast.error('An error occured');
+    fetchUpdateContent();
   };
-
-  if (err) {
-    return (
-      <div className='grid h-screen place-content-center'>
-        <Lottie className='h-80' animationData={error} />
-        <div className='text-2xl text-red-400 text-center'>{err}</div>
-        <Link to={'/'} className='flex justify-center'>
-          <button className='bg-blue-600 px-4 py-2 text-white rounded-md mt-6 hover:bg-blue-800'>
-            Back to home page
-          </button>
-        </Link>
-      </div>
-    );
-  }
 
   const handleDownloadFile = async (
     content_id: string,
@@ -148,20 +143,31 @@ const Group = () => {
         },
       })
       .then(async (response: any) => {
-        const url = response?.data?.url;
-        toast.success('Downloaded successfully');
+        if (
+          content_type.startsWith('image/') ||
+          content_type.startsWith('video/')
+        ) {
+          setContentViewer(true);
+          setContentUrl(response?.data?.url);
+          setContentType(content_type);
+        } else {
+          const url = response?.data?.url;
+          toast.success('Downloaded successfully');
 
-        setTimeout(() => {
           const link = document.createElement('a');
-          link.href = decodeURIComponent(url);
+          link.href = url;
           link.target = '_blank';
+
+          // Set the desired file name for download
+          link.download = content_name; // or any name you want
+
           document.body.appendChild(link);
           link.click();
 
           // Clean up
           URL.revokeObjectURL(url);
           document.body.removeChild(link);
-        }, 5000);
+        }
       });
   };
 
@@ -175,6 +181,9 @@ const Group = () => {
     axios
       .delete(`/api/files/${groupId}`, {
         data: [idToBeDeleted],
+        params: {
+          path: path || '',
+        },
       })
       .then((response: any) => {
         toast.success(response?.data);
@@ -192,6 +201,20 @@ const Group = () => {
     setDeleteModalOpen(false);
     setIdToBeDeleted('');
   };
+
+  if (err) {
+    return (
+      <div className='grid h-screen place-content-center'>
+        <Lottie className='h-80' animationData={error} />
+        <div className='text-2xl text-red-400 text-center'>{err}</div>
+        <Link to={'/'} className='flex justify-center'>
+          <button className='bg-blue-600 px-4 py-2 text-white rounded-md mt-6 hover:bg-blue-800'>
+            Back to home page
+          </button>
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <Layout>
@@ -265,11 +288,12 @@ const Group = () => {
           {allFiles?.length > 0 ? (
             <div className='grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 mt-8 gap-10'>
               {allFiles?.map((each: any) => {
-                const truncatedName =
+                let truncatedName =
                   each.content_name.length > 15
                     ? `${each.content_name.substring(0, 16)}...`
                     : each.content_name;
-
+                if (truncatedName === 'Error')
+                  truncatedName = 'Could not upload that';
                 return (
                   <div
                     key={each.content_id}
@@ -277,11 +301,19 @@ const Group = () => {
                     title={each.content_name}
                   >
                     {each.uploaded ? (
-                      <IconFileFilled
-                        width={40}
-                        height={40}
-                        className='mx-auto'
-                      />
+                      each.content_name === 'Error' ? (
+                        <IconAlertTriangleFilled
+                          width={40}
+                          height={40}
+                          className='mx-auto'
+                        />
+                      ) : (
+                        <IconFileFilled
+                          width={40}
+                          height={40}
+                          className='mx-auto'
+                        />
+                      )
                     ) : (
                       <>
                         <Lottie
@@ -297,18 +329,20 @@ const Group = () => {
                     <div className='mt-1 text-center'>{truncatedName}</div>
                     {each.uploaded ? (
                       <div className='mt-4 flex justify-center gap-3'>
-                        <button
-                          className='px-4 py-2 border border-md border-slate-900 hover:bg-green-500 hover:text-white transition-all duration-200 rounded-md'
-                          onClick={() =>
-                            handleDownloadFile(
-                              each.content_id,
-                              each.content_mimetype,
-                              each.content_name
-                            )
-                          }
-                        >
-                          View
-                        </button>
+                        {each.content_name === 'Error' ? null : (
+                          <button
+                            className='px-4 py-2 border border-md border-slate-900 hover:bg-green-500 hover:text-white transition-all duration-200 rounded-md'
+                            onClick={() =>
+                              handleDownloadFile(
+                                each.content_id,
+                                each.content_mimetype,
+                                each.content_name
+                              )
+                            }
+                          >
+                            View
+                          </button>
+                        )}
                         <button
                           className='px-4 py-2 border border-md border-slate-900 hover:bg-red-500 hover:text-white transition-all duration-200 rounded-md'
                           onClick={() => handleDelete(each.content_id)}
@@ -337,6 +371,12 @@ const Group = () => {
             setOpen={setFolderOpen}
             handleSuccess={handleSuccess}
             handleError={handleError}
+          />
+          <ContentViewer
+            open={openContentViewer}
+            setOpen={setContentViewer}
+            url={contentUrl}
+            mimeType={contentType}
           />
           <ConfirmDelete
             open={deleteModalOpen}

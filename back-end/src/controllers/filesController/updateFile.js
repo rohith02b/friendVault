@@ -6,10 +6,7 @@ const updateFile = async (req, res) => {
       where: {
         content_id: req.body.content_id,
       },
-      data: {
-        url: req.body.url,
-        uploaded: true,
-      },
+      data: req.body,
     });
   } catch (error) {
     console.log(error);

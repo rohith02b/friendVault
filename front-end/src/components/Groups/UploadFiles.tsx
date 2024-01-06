@@ -47,9 +47,7 @@ const UploadFiles = ({ open, setOpen, handleSuccess, handleError }) => {
           formik.resetForm();
           handleSuccess('files');
         })
-        .catch((error: any) => {
-          handleError();
-        })
+        .catch((error: any) => {})
         .then(() => {
           setOpen(false);
           setLoading(false);
@@ -80,14 +78,18 @@ const UploadFiles = ({ open, setOpen, handleSuccess, handleError }) => {
         await axios.put(`/api/files/${groupId}`, {
           content_id: content_id,
           url: decodeURIComponent(response.url.split('?')[0]),
+          uploaded: true,
         });
         handleSuccess('UpdatedFile');
       } else {
-        console.error('Error uploading file:', response.statusText);
+        await axios.put(`/api/files/${groupId}`, {
+          content_id: content_id,
+          uploaded: true,
+          content_name: 'Error',
+        });
+        handleError();
       }
-    } catch (error) {
-      console.error('Error uploading file:', error);
-    }
+    } catch (error) {}
   };
 
   return (
